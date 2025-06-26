@@ -3,4 +3,4 @@
 
 Abaixo temos a arquitetura pensada inicialmente para o projeto
 
-![Logotipo da empresa](images/Arquitetura.png)
+![Arquitetura](../images/Arquitetura.png)
