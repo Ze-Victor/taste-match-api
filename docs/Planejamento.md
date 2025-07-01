@@ -7,13 +7,28 @@ Criar a base de cadastro de perfil e início da lógica de compatibilidade.
 
 #### ✅ Atividades:
 - [ ] Criar tela de cadastro/edição de perfil (`UX/UI`)
+    - Como um novo usuário, eu quero criar e editar meu perfil, para que eu possa personalizar minhas informações e começar a usar o aplicativo.
+
 - [ ] Criar campos de preferências de locais (ex: bar, restaurante, cafeteria)
+    - Como um usuário, eu quero selecionar meus tipos de locais preferidos (ex: bar, restaurante, cafeteria), para que o aplicativo me conecte com pessoas que buscam experiências semelhantes.
+
 - [ ] Criar campos de preferências de gastronomia (ex: japonesa, italiana)
+    - Como um usuário, eu quero escolher minhas preferências gastronômicas (ex: japonesa, italiana), para que eu possa encontrar pessoas com gostos culinários parecidos.
+
 - [ ] Implementar persistência das preferências no backend
+    - Como um usuário, eu quero que minhas preferências de locais e gastronomia sejam salvas, para que eu não precise inseri-las novamente a cada uso e elas sejam consideradas na busca por compatibilidade.
+
 - [ ] Validação de campos obrigatórios
+    - Como um usuário, eu quero ser avisado sobre campos obrigatórios não preenchidos durante o cadastro/edição de perfil, para que eu possa corrigir as informações e garantir que meu perfil esteja completo e válido.
+    
 - [ ] Desenvolver lógica inicial de compatibilidade entre perfis
+    - Como o sistema, eu quero aplicar uma lógica inicial de compatibilidade com base nas preferências de locais e gastronomia dos usuários, para que eu possa identificar perfis que combinam e otimizar as sugestões.
+
 - [ ] Criar endpoint para buscar perfis compatíveis
+    - Como o sistema, eu quero ter um endpoint que retorne perfis compatíveis, para que o aplicativo possa exibir sugestões relevantes para o usuário.
+
 - [ ] Criar layout de exibição de perfis compatíveis
+    - Como um usuário, eu quero ver um layout claro e intuitivo com os perfis compatíveis sugeridos, para que eu possa facilmente visualizar e interagir com as pessoas que me interessam.
 
 ---
 
