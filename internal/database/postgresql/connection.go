@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"gitlab.luizalabs.com/taste-match-api/internal/config"
-	"gorm.io/driver/mysql"
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/internal/config"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -62,13 +62,13 @@ func GetConnection() (db *gorm.DB, err error) {
 		}
 	}
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", dbUser, dbPass, dbHost, dbPort, dbName)
-	db, err = gorm.Open(mysql.New(mysql.Config{
+	dsn := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable", dbUser, dbPass, dbHost, dbPort, dbName)
+	db, err = gorm.Open(postgres.New(postgres.Config{
 		DSN: dsn,
 	}), &dbConfig)
 
 	if err != nil {
-		return nil, errors.New("[connection.GetConnection()] - Error on create connection.\nPlease, try to see your environment variables or database connection...\nError: " + err.Error())
+		return nil, errors.New("[postgres.OpenConnection()] - Error on create postgres connection.\nPlease, try to see your environment variables or database connection...\nError: " + err.Error())
 	}
 	return db, nil
 }

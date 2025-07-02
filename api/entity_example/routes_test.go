@@ -6,9 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/api/entity_example"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"gitlab.luizalabs.com/taste-match-api/api/entity_example"
 )
 
 type mockEntityExampleController struct{}

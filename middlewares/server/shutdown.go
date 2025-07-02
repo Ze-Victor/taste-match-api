@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"gitlab.luizalabs.com/taste-match-api/internal/config"
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/internal/config"
 )
 
 // WaitingForShutdown register a channel and waiting for finalization signal

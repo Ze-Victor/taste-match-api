@@ -1,8 +1,8 @@
 package migration
 
 import (
-	"gitlab.luizalabs.com/taste-match-api/api/entity_example"
-	"gitlab.luizalabs.com/taste-match-api/internal/config"
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/api/entity_example"
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/internal/config"
 	"gorm.io/gorm"
 )
 
