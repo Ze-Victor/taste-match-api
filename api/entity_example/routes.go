@@ -6,9 +6,6 @@ import (
 
 func SetupRoutes(routerGroup *gin.RouterGroup, exampleController *EntityExampleController) {
 
-	routerGroup.GET("/address/search", exampleController.Find)
-	routerGroup.POST("/address", exampleController.Create)
-	routerGroup.PATCH("/address/:uuid", exampleController.Update)
-	routerGroup.DELETE("/address/:uuid", exampleController.Delete)
+	routerGroup.GET("/health", exampleController.Find)
 
 }
