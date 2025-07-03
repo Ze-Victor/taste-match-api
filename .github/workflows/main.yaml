@@ -1,0 +1,35 @@
+name: Main CI
+
+on:
+  pull_request_target:
+    types:
+      - closed
+    branches: 
+      - main
+
+jobs:
+
+  main-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21.1'
+
+      - name: Install golangci-lint
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.52.2
+
+      - name: Resolve dependencies
+        run: make dependencies
+
+      - name: Build
+        run: make build
+
+      - name: Quality
+        run: make lint

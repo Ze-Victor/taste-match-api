@@ -7,13 +7,13 @@ services:
     container_name: taste-match-api
     # Mapeando a porta correta que sua API usa
     ports:
-      - "8000:8000" # <--- MUDANÇA
+      - "8000:8000"
     # Variáveis de ambiente que sua aplicação Go vai usar
     environment:
       - DB_HOST=db # <--- IMPORTANTE: Deve ser o nome do serviço do banco
-      - DB_USER=user_taste_match # <--- MUDANÇA
-      - DB_PASS=db_pass_default # <--- MUDANÇA
-      - DB_NAME=taste_match_db # <--- MUDANÇA
+      - DB_USER=user_taste_match
+      - DB_PASS=db_pass_default
+      - DB_NAME=taste_match_db
       - DB_PORT=5432
       - SERVER_PORT=8000
     depends_on:
