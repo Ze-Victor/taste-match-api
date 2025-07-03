@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/api/entity_example"
 	"github.com/stretchr/testify/assert"
-	"gitlab.luizalabs.com/taste-match-api/api/entity_example"
 )
 
 func TestEntityExample_TableName(t *testing.T) {

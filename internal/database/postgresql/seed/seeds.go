@@ -3,7 +3,7 @@ package seed
 import (
 	"fmt"
 
-	"gitlab.luizalabs.com/taste-match-api/api/entity_example"
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/api/entity_example"
 	"gorm.io/gorm"
 )
 

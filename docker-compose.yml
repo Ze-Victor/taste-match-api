@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # Serviço para a sua API em Go
+  api:
+    build: .
+    container_name: taste-match-api
+    # Mapeando a porta correta que sua API usa
+    ports:
+      - "8000:8000" # <--- MUDANÇA
+    # Variáveis de ambiente que sua aplicação Go vai usar
+    environment:
+      - DB_HOST=db # <--- IMPORTANTE: Deve ser o nome do serviço do banco
+      - DB_USER=user_taste_match # <--- MUDANÇA
+      - DB_PASS=db_pass_default # <--- MUDANÇA
+      - DB_NAME=taste_match_db # <--- MUDANÇA
+      - DB_PORT=5432
+      - SERVER_PORT=8000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Serviço para o banco de dados PostgreSQL
+  db:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    healthcheck:
+      # Verificando com o usuário e banco corretos
+      test: ["CMD-SHELL", "pg_isready -U user_taste_match -d taste_match_db"] # <--- MUDANÇA
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # O PostgreSQL usa essas variáveis para criar o banco na primeira vez.
+    # Elas PRECISAM ser iguais às da sua API.
+    environment:
+      - POSTGRES_USER=user_taste_match # <--- MUDANÇA
+      - POSTGRES_PASSWORD=db_pass_default # <--- MUDANÇA
+      - POSTGRES_DB=taste_match_db # <--- MUDANÇA
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    # Você não precisa expor a porta 5432 do banco para o host,
+    # a menos que queira conectar com um cliente de DB (ex: DBeaver).
+    # Se precisar, descomente a linha abaixo.
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres-data:

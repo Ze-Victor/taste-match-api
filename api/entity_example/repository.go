@@ -8,8 +8,8 @@ type EntityExampleRepositoryImpl struct {
 	DB *gorm.DB
 }
 
-func NewEntityExampleRepository() *EntityExampleRepositoryImpl {
-	return &EntityExampleRepositoryImpl{}
+func NewEntityExampleRepository(db *gorm.DB) *EntityExampleRepositoryImpl {
+	return &EntityExampleRepositoryImpl{DB: db}
 }
 
 func (b EntityExampleRepositoryImpl) Find() (*EntityExample, error) {

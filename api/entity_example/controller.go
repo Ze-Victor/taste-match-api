@@ -1,6 +1,8 @@
 package entity_example
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,8 +17,14 @@ func NewEntityExampleController(entityExampleBusiness EntityExampleBusiness) *En
 }
 
 func (controller *EntityExampleController) Find(httpContext *gin.Context) {
-	// TODO impl this
-	return
+	// Retorna status 200 OK e um objeto JSON
+	httpContext.JSON(http.StatusOK, gin.H{
+		"message": "Busca realizada com sucesso!",
+		"data": gin.H{ // Exemplo com dados aninhados
+			"id":   1,
+			"name": "Exemplo",
+		},
+	})
 }
 
 func (controller *EntityExampleController) Update(httpContext *gin.Context) {

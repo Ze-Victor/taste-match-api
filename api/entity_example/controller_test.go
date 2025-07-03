@@ -4,8 +4,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/api/entity_example"
 	"github.com/gin-gonic/gin"
-	"gitlab.luizalabs.com/taste-match-api/api/entity_example"
 )
 
 type mockBusiness struct{}

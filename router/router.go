@@ -1,21 +1,19 @@
 package router
 
 import (
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/api/entity_example"
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/application_context"
 	"github.com/gin-gonic/gin"
-	"gitlab.luizalabs.com/luizalabs/luizalabs-commons-golang/reply"
-	"gitlab.luizalabs.com/taste-match-api/api/entity_example"
-	"gitlab.luizalabs.com/taste-match-api/application_context"
 )
 
 func SetupRestAPI(router *gin.Engine, applicationContext *application_context.ApplicationContext) *gin.Engine {
 	prepareRoutes(router, applicationContext)
 	//prepareAuthRoutes(router, applicationContext)
-	createResponseRouteNotFound(router)
 	return router
 }
 
 func prepareRoutes(router *gin.Engine, applicationContext *application_context.ApplicationContext) {
-	routerGroup := router.Group("/api")
+	routerGroup := router.Group("/v1")
 	entity_example.SetupRoutes(routerGroup, applicationContext.ExampleController)
 }
 
@@ -23,9 +21,3 @@ func prepareRoutes(router *gin.Engine, applicationContext *application_context.A
 // 	routerGroup := router.Group("table")
 // 	entity_example.SetupRoutes(routerGroup, applicationContext.ExampleController)
 // }
-
-func createResponseRouteNotFound(router *gin.Engine) {
-	router.NoRoute(func(ginContext *gin.Context) {
-		reply.RouteNotFound(ginContext.Writer)
-	})
-}

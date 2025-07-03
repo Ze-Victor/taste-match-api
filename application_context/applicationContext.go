@@ -1,7 +1,8 @@
 package application_context
 
 import (
-	"gitlab.luizalabs.com/taste-match-api/api/entity_example"
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/api/entity_example"
+	"gorm.io/gorm"
 )
 
 type ApplicationContext struct {
@@ -10,8 +11,8 @@ type ApplicationContext struct {
 	ExampleRepository *entity_example.EntityExampleRepository
 }
 
-func NewApplicationContext() *ApplicationContext {
-	exampleRepository := entity_example.NewEntityExampleRepository()
+func NewApplicationContext(db *gorm.DB) *ApplicationContext {
+	exampleRepository := entity_example.NewEntityExampleRepository(db)
 	exampleBusiness := entity_example.NewEntityExampleBusinessImpl(exampleRepository)
 	exampleController := entity_example.NewEntityExampleController(exampleBusiness)
 
