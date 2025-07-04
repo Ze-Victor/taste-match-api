@@ -69,8 +69,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    # O PostgreSQL usa essas variáveis para criar o banco na primeira vez.
-    # Elas PRECISAM ser iguais às da sua API.
+    # O PostgreSQL usa essas variáveis para criar o banco na primeira vez. Elas PRECISAM ser iguais às da sua API.
     environment:
       - POSTGRES_USER=user_taste_match # <--- MUDANÇA
       - POSTGRES_PASSWORD=db_pass_default # <--- MUDANÇA
