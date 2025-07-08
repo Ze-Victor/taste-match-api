@@ -13,33 +13,33 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-// GetConnection returns a configured instance of gorm connection
 func GetConnection() (db *gorm.DB, err error) {
-	dbUser := config.Get().Database.User
-	dbPass := config.Get().Database.Pass
-	dbHost := config.Get().Database.Host
-	dbPort := config.Get().Database.Port
-	dbName := config.Get().Database.Name
+	var dsn string
 
-	if len(os.Args) > 1 && os.Args[1] == "migrate" {
-		dbUser = config.Get().Database.UserMigration
-		dbPass = config.Get().Database.PassMigration
-	}
+	databaseURL := os.Getenv("DATABASE_URL")
 
-	if dbUser == "" {
-		err = errors.New("Invalid environment variable 'DB_USER'. Configure it and try again")
-	}
-	if dbPass == "" {
-		err = errors.New("Invalid environment variable 'DB_PASS'. Configure it and try again")
-	}
-	if dbHost == "" {
-		err = errors.New("Invalid environment variable 'DB_HOST'. Configure it and try again")
-	}
-	if dbPort == "" {
-		err = errors.New("Invalid environment variable 'DB_PORT'. Configure it and try again")
-	}
-	if dbName == "" {
-		err = errors.New("Invalid environment variable 'DB_NAME'. Configure it and try again")
+	if databaseURL != "" {
+		dsn = databaseURL
+	} else {
+		dbUser := config.Get().Database.User
+		dbPass := config.Get().Database.Pass
+		dbHost := config.Get().Database.Host
+		dbPort := config.Get().Database.Port
+		dbName := config.Get().Database.Name
+
+		if len(os.Args) > 1 && os.Args[1] == "migrate" {
+			dbUser = config.Get().Database.UserMigration
+			dbPass = config.Get().Database.PassMigration
+		}
+
+		if dbUser == "" {
+			return nil, errors.New("Invalid environment variable 'DB_USER'. Configure it and try again")
+		}
+		if dbName == "" {
+			return nil, errors.New("Invalid environment variable 'DB_NAME'. Configure it and try again")
+		}
+
+		dsn = fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable", dbUser, dbPass, dbHost, dbPort, dbName)
 	}
 
 	var dbConfig gorm.Config
@@ -62,7 +62,6 @@ func GetConnection() (db *gorm.DB, err error) {
 		}
 	}
 
-	dsn := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable", dbUser, dbPass, dbHost, dbPort, dbName)
 	db, err = gorm.Open(postgres.New(postgres.Config{
 		DSN: dsn,
 	}), &dbConfig)

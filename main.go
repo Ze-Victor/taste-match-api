@@ -46,7 +46,13 @@ func setupRouter() *gin.Engine {
 }
 
 func main() {
-	addr := fmt.Sprintf(`%s:%s`, config.Get().Server.Host, config.Get().Server.Port)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = config.Get().Server.Port
+	}
+
+	addr := fmt.Sprintf(":%s", port)
+
 	srv := &http.Server{
 		Addr:    addr,
 		Handler: setupRouter(),
