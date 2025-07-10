@@ -7,5 +7,6 @@ import (
 func SetupRoutes(routerGroup *gin.RouterGroup, exampleController *EntityExampleController) {
 
 	routerGroup.GET("/health", exampleController.Find)
+	routerGroup.GET("/user", exampleController.FindAllUsers)
 
 }
