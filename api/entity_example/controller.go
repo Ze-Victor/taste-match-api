@@ -27,6 +27,17 @@ func (controller *EntityExampleController) Find(httpContext *gin.Context) {
 	})
 }
 
+func (controller *EntityExampleController) FindAllUsers(httpContext *gin.Context) {
+	users, err := controller.EntityExampleBusiness.FindAll()
+
+	if err != nil {
+		httpContext.JSON(http.StatusInternalServerError, gin.H{"error": "an internal error occurred"})
+		return
+	}
+
+	httpContext.JSON(http.StatusOK, users)
+}
+
 func (controller *EntityExampleController) Update(httpContext *gin.Context) {
 	// TODO impl this
 	return
