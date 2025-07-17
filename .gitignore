@@ -1,0 +1,11 @@
+.env-development
+env-development
+.env
+env
+
+.vscode/
+.qodo/
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project

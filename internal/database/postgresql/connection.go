@@ -39,7 +39,7 @@ func GetConnection() (db *gorm.DB, err error) {
 			return nil, errors.New("Invalid environment variable 'DB_NAME'. Configure it and try again")
 		}
 
-		dsn = fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable", dbUser, dbPass, dbHost, dbPort, dbName)
+		dsn = fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=require", dbUser, dbPass, dbHost, dbPort, dbName)
 	}
 
 	var dbConfig gorm.Config
