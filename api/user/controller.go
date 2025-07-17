@@ -1,10 +1,12 @@
 package user
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type UserController struct {
@@ -18,24 +20,23 @@ func NewUserController(userBusiness UserBusiness) *UserController {
 }
 
 func (controller *UserController) Find(httpContext *gin.Context) {
-	id, valid := httpContext.Params.Get("id")
+	idStr := httpContext.Param("id")
 
-	if !valid {
-		httpContext.JSON(http.StatusBadRequest, gin.H{"error": "invalid user ID"})
+	idInt, err := strconv.Atoi(idStr)
+
+	if err != nil {
+		httpContext.JSON(http.StatusBadRequest, gin.H{"error": "ID de usuário inválido"})
 		return
 	}
 
-	idInt, error := strconv.Atoi(id)
+	user, err := controller.UserBusiness.Find(idInt)
 
-	if error != nil {
-		httpContext.JSON(http.StatusBadRequest, gin.H{"error": "invalid user ID"})
-		return
-	}
-
-	user, error := controller.UserBusiness.Find(idInt)
-
-	if error != nil {
-		httpContext.JSON(http.StatusInternalServerError, gin.H{"error": "an internal error occurred"})
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			httpContext.JSON(http.StatusNotFound, gin.H{"error": "usuário não encontrado"})
+			return
+		}
+		httpContext.JSON(http.StatusInternalServerError, gin.H{"error": "ocorreu um erro interno"})
 		return
 	}
 

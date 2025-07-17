@@ -16,7 +16,7 @@ func NewUserRepository(db *gorm.DB) *UserRepositoryImpl {
 func (b UserRepositoryImpl) Find(id int) (*entities.User, error) {
 	var user *entities.User
 
-	result := b.DB.Preload("Preferences").Find(&user).Where("id = ?", id)
+	result := b.DB.Preload("Preferences").First(&user, id)
 	if result.Error != nil {
 		return nil, result.Error
 	}
