@@ -5,7 +5,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	"github.com/Ze-Victor/taste-match-api/taste-match-api/application_context"
@@ -35,6 +37,20 @@ func setupRouter() *gin.Engine {
 
 	ginEngine := gin.New()
 	ginEngine.Use(gin.Recovery())
+
+	configCors := cors.Config{
+		AllowOrigins: []string{"https://taste-match-app.onrender.com", "http://localhost:3000"},
+
+		AllowMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+
+		AllowHeaders: []string{"Origin", "Content-Type", "Authorization"},
+
+		AllowCredentials: true,
+
+		MaxAge: 12 * time.Hour,
+	}
+
+	ginEngine.Use(cors.New(configCors))
 
 	if config.Get().Env == "development" {
 		ginEngine.Use(gin.Logger())
