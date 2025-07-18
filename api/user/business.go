@@ -1,16 +1,23 @@
 package user
 
 import (
+	"errors"
+
 	user_dto "github.com/Ze-Victor/taste-match-api/taste-match-api/api/user/dto"
+	bcrypt "golang.org/x/crypto/bcrypt"
+
 	"github.com/Ze-Victor/taste-match-api/taste-match-api/entities"
+
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/api/preferences"
 )
 
 type UserBusinessImpl struct {
-	UserRepository UserRepository
+	UserRepository       UserRepository
+	PreferenceRepository preferences.PreferencesRepository
 }
 
-func NewUserBusinessImpl(UserRepository UserRepository) *UserBusinessImpl {
-	return &UserBusinessImpl{UserRepository}
+func NewUserBusinessImpl(UserRepository UserRepository, PreferenceRepository preferences.PreferencesRepository) *UserBusinessImpl {
+	return &UserBusinessImpl{UserRepository, PreferenceRepository}
 }
 
 func (b UserBusinessImpl) Find(id int) (*user_dto.UserResponse, error) {
@@ -82,9 +89,38 @@ func (b UserBusinessImpl) Update(c User) (*User, error) {
 	return nil, nil
 }
 
-func (b UserBusinessImpl) Create(c User) (*User, error) {
-	// TODO impl this
-	return nil, nil
+func (b UserBusinessImpl) Create(request user_dto.CreateUserRequest) error {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	var preferencesFromDB []entities.Preference
+	if len(request.Preference) > 0 {
+		prefs, err := b.PreferenceRepository.FindByIDs(request.Preference)
+		if err != nil {
+			return err
+		}
+		if len(prefs) != len(request.Preference) {
+			return errors.New("uma ou mais preferências não foram encontradas")
+		}
+		preferencesFromDB = prefs
+	}
+
+	userToCreate := &entities.User{
+		Name:        request.Name,
+		Email:       request.Email,
+		Password:    string(hashedPassword),
+		Gender:      request.Gender,
+		BirthDate:   request.BirthDate,
+		Preferences: preferencesFromDB,
+	}
+
+	if err := b.UserRepository.Create(userToCreate); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (b UserBusinessImpl) Delete(c User) error {

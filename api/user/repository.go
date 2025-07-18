@@ -41,9 +41,14 @@ func (b UserRepositoryImpl) Update(c User) (*User, error) {
 	return nil, nil
 }
 
-func (b UserRepositoryImpl) Create(c User) (*User, error) {
-	// TODO impl this
-	return nil, nil
+func (r *UserRepositoryImpl) Create(user *entities.User) error {
+	return r.DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(user).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
 
 func (b UserRepositoryImpl) Delete(c User) error {

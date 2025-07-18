@@ -26,13 +26,13 @@ func NewApplicationContext(db *gorm.DB) *ApplicationContext {
 	exampleBusiness := entity_example.NewEntityExampleBusinessImpl(exampleRepository)
 	exampleController := entity_example.NewEntityExampleController(exampleBusiness)
 
-	userRepository := user.NewUserRepository(db)
-	userBusiness := user.NewUserBusinessImpl(userRepository)
-	userController := user.NewUserController(userBusiness)
-
 	preferencesRepository := preferences.NewPreferencesRepository(db)
 	preferencesBusiness := preferences.NewPreferencesBusinessImpl(preferencesRepository)
 	preferencesController := preferences.NewPreferencesController(preferencesBusiness)
+
+	userRepository := user.NewUserRepository(db)
+	userBusiness := user.NewUserBusinessImpl(userRepository, preferencesRepository)
+	userController := user.NewUserController(userBusiness)
 
 	return &ApplicationContext{
 		ExampleController:     exampleController,

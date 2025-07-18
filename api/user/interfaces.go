@@ -9,7 +9,7 @@ type UserRepository interface {
 	Find(id int) (*entities.User, error)
 	FindAllWithPreferences() ([]entities.User, error)
 	Update(c User) (*User, error)
-	Create(c User) (*User, error)
+	Create(user *entities.User) error
 	Delete(c User) error
 }
 
@@ -18,6 +18,6 @@ type UserBusiness interface {
 	FindAll() ([]user_dto.UserResponse, error)
 	CalculateMatch(userID1, userID2 int) (float64, error)
 	Update(c User) (*User, error)
-	Create(c User) (*User, error)
+	Create(request user_dto.CreateUserRequest) error
 	Delete(c User) error
 }
