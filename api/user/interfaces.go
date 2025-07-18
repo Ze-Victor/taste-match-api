@@ -16,6 +16,7 @@ type UserRepository interface {
 type UserBusiness interface {
 	Find(id int) (*user_dto.UserResponse, error)
 	FindAll() ([]user_dto.UserResponse, error)
+	CalculateMatch(userID1, userID2 int) (float64, error)
 	Update(c User) (*User, error)
 	Create(c User) (*User, error)
 	Delete(c User) error

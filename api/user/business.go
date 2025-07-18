@@ -1,6 +1,9 @@
 package user
 
-import user_dto "github.com/Ze-Victor/taste-match-api/taste-match-api/api/user/dto"
+import (
+	user_dto "github.com/Ze-Victor/taste-match-api/taste-match-api/api/user/dto"
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/entities"
+)
 
 type UserBusinessImpl struct {
 	UserRepository UserRepository
@@ -58,6 +61,22 @@ func (b UserBusinessImpl) FindAll() ([]user_dto.UserResponse, error) {
 	return response, nil
 }
 
+func (b UserBusinessImpl) CalculateMatch(userID1, userID2 int) (float64, error) {
+	user1, err := b.UserRepository.Find(userID1)
+	if err != nil {
+		return 0, err
+	}
+
+	user2, err := b.UserRepository.Find(userID2)
+	if err != nil {
+		return 0, err
+	}
+
+	score := calculateMatchScore(user1.Preferences, user2.Preferences)
+
+	return score * 100, nil
+}
+
 func (b UserBusinessImpl) Update(c User) (*User, error) {
 	// TODO impl this
 	return nil, nil
@@ -71,4 +90,29 @@ func (b UserBusinessImpl) Create(c User) (*User, error) {
 func (b UserBusinessImpl) Delete(c User) error {
 	// TODO impl this
 	return nil
+}
+
+func calculateMatchScore(preferencesA, preferencesB []entities.Preference) float64 {
+	setA := make(map[uint]bool)
+	for _, pref := range preferencesA {
+		setA[pref.ID] = true
+	}
+
+	intersectionSize := 0
+	for _, pref := range preferencesB {
+		if setA[pref.ID] {
+			intersectionSize++
+		}
+	}
+
+	unionSize := len(preferencesA) + len(preferencesB) - intersectionSize
+
+	if unionSize == 0 {
+		if len(preferencesA) == 0 && len(preferencesB) == 0 {
+			return 1.0
+		}
+		return 0.0
+	}
+
+	return float64(intersectionSize) / float64(unionSize)
 }

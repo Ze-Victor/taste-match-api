@@ -2,6 +2,7 @@ package application_context
 
 import (
 	"github.com/Ze-Victor/taste-match-api/taste-match-api/api/entity_example"
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/api/preferences"
 	"github.com/Ze-Victor/taste-match-api/taste-match-api/api/user"
 	"gorm.io/gorm"
 )
@@ -14,6 +15,10 @@ type ApplicationContext struct {
 	UserController *user.UserController
 	UserBusiness   *user.UserBusiness
 	UserRepository *user.UserRepository
+
+	PreferencesController *preferences.PreferencesController
+	PreferencesBusiness   *preferences.PreferencesBusiness
+	PreferencesRepository *preferences.PreferencesRepository
 }
 
 func NewApplicationContext(db *gorm.DB) *ApplicationContext {
@@ -25,8 +30,13 @@ func NewApplicationContext(db *gorm.DB) *ApplicationContext {
 	userBusiness := user.NewUserBusinessImpl(userRepository)
 	userController := user.NewUserController(userBusiness)
 
+	preferencesRepository := preferences.NewPreferencesRepository(db)
+	preferencesBusiness := preferences.NewPreferencesBusinessImpl(preferencesRepository)
+	preferencesController := preferences.NewPreferencesController(preferencesBusiness)
+
 	return &ApplicationContext{
-		ExampleController: exampleController,
-		UserController:    userController,
+		ExampleController:     exampleController,
+		UserController:        userController,
+		PreferencesController: preferencesController,
 	}
 }
