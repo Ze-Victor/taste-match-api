@@ -2,6 +2,7 @@ package user
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -52,6 +53,56 @@ func (controller *UserController) FindAllUsers(httpContext *gin.Context) {
 	}
 
 	httpContext.JSON(http.StatusOK, users)
+}
+
+func (controller *UserController) MatchUsers(httpContext *gin.Context) {
+	userAID := httpContext.Query("userA")
+	userBID := httpContext.Query("userB")
+
+	if userAID == "" || userBID == "" {
+		httpContext.JSON(http.StatusBadRequest, gin.H{
+			"error": "Both 'userA' and 'userB' query parameters are required.",
+		})
+		return
+	}
+
+	idA, errA := strconv.Atoi(userAID)
+	if errA != nil {
+		httpContext.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid 'userA' ID. It must be a positive integer.",
+		})
+		return
+	}
+
+	idB, errB := strconv.Atoi(userBID)
+	if errB != nil {
+		httpContext.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid 'userB' ID. It must be a positive integer.",
+		})
+		return
+	}
+
+	matchPercentage, err := controller.UserBusiness.CalculateMatch(idA, idB)
+
+	if err != nil {
+		if err.Error() == "user not found" {
+			httpContext.JSON(http.StatusNotFound, gin.H{
+				"error": fmt.Sprintf("Could not find one or both users. Please check IDs: %s, %s", userAID, userBID),
+			})
+			return
+		}
+
+		httpContext.JSON(http.StatusInternalServerError, gin.H{
+			"error": "An internal error occurred while calculating the match.",
+		})
+		return
+	}
+
+	httpContext.JSON(http.StatusOK, gin.H{
+		"user_a_id":        userAID,
+		"user_b_id":        userBID,
+		"match_percentage": fmt.Sprintf("%.2f%%", matchPercentage),
+	})
 }
 
 func (controller *UserController) Update(httpContext *gin.Context) {
