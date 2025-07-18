@@ -20,6 +20,12 @@ func NewUserController(userBusiness UserBusiness) *UserController {
 	}
 }
 
+func (controller *UserController) Health(httpContext *gin.Context) {
+	httpContext.JSON(http.StatusOK, gin.H{
+		"message": "pong",
+	})
+}
+
 func (controller *UserController) Find(httpContext *gin.Context) {
 	idStr := httpContext.Param("id")
 
