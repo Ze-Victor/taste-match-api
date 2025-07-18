@@ -2,6 +2,8 @@ package user
 
 import (
 	user_dto "github.com/Ze-Victor/taste-match-api/taste-match-api/api/user/dto"
+	bcrypt "golang.org/x/crypto/bcrypt"
+
 	"github.com/Ze-Victor/taste-match-api/taste-match-api/entities"
 )
 
@@ -82,9 +84,26 @@ func (b UserBusinessImpl) Update(c User) (*User, error) {
 	return nil, nil
 }
 
-func (b UserBusinessImpl) Create(c User) (*User, error) {
-	// TODO impl this
-	return nil, nil
+func (b UserBusinessImpl) Create(request user_dto.CreateUserRequest) error {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	userToCreate := &entities.User{
+		Name:        request.Name,
+		Email:       request.Email,
+		Password:    string(hashedPassword),
+		Gender:      request.Gender,
+		BirthDate:   request.BirthDate,
+		Preferences: request.Preference,
+	}
+
+	if err := b.UserRepository.Create(userToCreate); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (b UserBusinessImpl) Delete(c User) error {

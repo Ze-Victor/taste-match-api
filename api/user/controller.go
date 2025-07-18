@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
+	user_dto "github.com/Ze-Victor/taste-match-api/taste-match-api/api/user/dto"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -117,8 +119,32 @@ func (controller *UserController) Update(httpContext *gin.Context) {
 }
 
 func (controller *UserController) Create(httpContext *gin.Context) {
-	// TODO impl this
-	return
+	var requestBody user_dto.CreateUserRequest
+
+	if err := httpContext.ShouldBindJSON(&requestBody); err != nil {
+		httpContext.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Dados inválidos",
+			"details": err.Error(),
+		})
+		return
+	}
+
+	createdUserResponse := gin.H{
+		"name":        requestBody.Name,
+		"email":       requestBody.Email,
+		"gender":      requestBody.Gender,
+		"birthDate":   requestBody.BirthDate,
+		"preferences": requestBody.Preference,
+	}
+
+	if err := controller.UserBusiness.Create(requestBody); err != nil {
+		httpContext.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Erro ao criar usuário",
+			"details": err.Error(),
+		})
+	}
+
+	httpContext.JSON(http.StatusCreated, createdUserResponse)
 }
 
 func (controller *UserController) Delete(httpContext *gin.Context) {
