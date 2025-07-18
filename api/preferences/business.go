@@ -1,6 +1,9 @@
 package preferences
 
-import preferences_dto "github.com/Ze-Victor/taste-match-api/taste-match-api/api/preferences/dto"
+import (
+	preferences_dto "github.com/Ze-Victor/taste-match-api/taste-match-api/api/preferences/dto"
+	entities "github.com/Ze-Victor/taste-match-api/taste-match-api/entities"
+)
 
 type PreferencesBusinessImpl struct {
 	PreferencesRepository PreferencesRepository
@@ -17,4 +20,12 @@ func (b PreferencesBusinessImpl) FindAll() ([]preferences_dto.Preferences, error
 	}
 
 	return preferencesFromDb, nil
+}
+
+func (b *PreferencesBusinessImpl) FindByID(id uint) (*entities.Preference, error) {
+	return b.PreferencesRepository.FindByID(id)
+}
+
+func (b *PreferencesBusinessImpl) FindByIDs(ids []uint) ([]entities.Preference, error) {
+	return b.PreferencesRepository.FindByIDs(ids)
 }

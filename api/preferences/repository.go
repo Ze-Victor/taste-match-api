@@ -2,6 +2,7 @@ package preferences
 
 import (
 	preferences_dto "github.com/Ze-Victor/taste-match-api/taste-match-api/api/preferences/dto"
+	"github.com/Ze-Victor/taste-match-api/taste-match-api/entities"
 	"gorm.io/gorm"
 )
 
@@ -22,5 +23,21 @@ func (r PreferencesRepositoryImpl) FindAll() ([]preferences_dto.Preferences, err
 		return nil, result.Error
 	}
 
+	return preferences, nil
+}
+
+func (r *PreferencesRepositoryImpl) FindByID(id uint) (*entities.Preference, error) {
+	var preference entities.Preference
+	if err := r.DB.First(&preference, id).Error; err != nil {
+		return nil, err
+	}
+	return &preference, nil
+}
+
+func (r *PreferencesRepositoryImpl) FindByIDs(ids []uint) ([]entities.Preference, error) {
+	var preferences []entities.Preference
+	if err := r.DB.Where("id IN ?", ids).Find(&preferences).Error; err != nil {
+		return nil, err
+	}
 	return preferences, nil
 }
