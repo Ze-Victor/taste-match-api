@@ -51,18 +51,21 @@ func (b UserBusinessImpl) FindAll() ([]user_dto.UserResponse, error) {
 	var response []user_dto.UserResponse
 
 	for _, user := range usersFromDb {
-		var userPrefs []user_dto.PreferenceResponse
-		for _, pref := range user.Preferences {
-			userPrefs = append(userPrefs, user_dto.PreferenceResponse{
-				Description: pref.Description,
+		if user.ID != 4 {
+			var userPrefs []user_dto.PreferenceResponse
+			for _, pref := range user.Preferences {
+				userPrefs = append(userPrefs, user_dto.PreferenceResponse{
+					Description: pref.Description,
+				})
+			}
+
+			response = append(response, user_dto.UserResponse{
+				ID:          user.ID,
+				Name:        user.Name,
+				BirthDate:   user.BirthDate.Format("2006-01-02"),
+				Preferences: userPrefs,
 			})
 		}
-
-		response = append(response, user_dto.UserResponse{
-			Name:        user.Name,
-			BirthDate:   user.BirthDate.Format("2006-01-02"),
-			Preferences: userPrefs,
-		})
 	}
 
 	return response, nil
